@@ -62,6 +62,7 @@ testY = 10
 # Game Over
 over_font = pygame.font.Font('freesansbold.ttf', 64)
 
+game_over = False
 
 def show_score(x, y):
     score = font.render("Score : " + str(score_value), True, (255, 255, 255))
@@ -69,9 +70,12 @@ def show_score(x, y):
 
 
 def game_over_text():
+    global game_over
     over_text = over_font.render("GAME OVER", True, (255, 255, 255))
     screen.blit(over_text, (200, 250))
-
+    display_restart = font.render("press SPACE to restart", True, (255, 255, 255))
+    screen.blit(display_restart, (210, 320))
+    game_over = True
 
 def player(x, y):
     screen.blit(playerImg, (x, y))
@@ -122,9 +126,12 @@ while running:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 playerX_change = 0
-
-    # 5 = 5 + -0.1 -> 5 = 5 - 0.1
-    # 5 = 5 + 0.1
+            if event.key == pygame.K_SPACE and game_over:
+                playerX = 370
+                playerY = 480
+                enemyX[i] = random.randint(0, 736)
+                enemyY[i] = random.randint(50, 150)
+                game_over = False
 
     playerX += playerX_change
     if playerX <= 0:
@@ -140,6 +147,7 @@ while running:
             for j in range(num_of_enemies):
                 enemyY[j] = 2000
             game_over_text()
+            game_over = True
             break
 
         enemyX[i] += enemyX_change[i]
